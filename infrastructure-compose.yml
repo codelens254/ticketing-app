@@ -1,7 +1,7 @@
 version: "3.5"
 
 services:
-  # Consul For Service Discovery
+  # Consul :- Automate network configurations, discover services, and enable secure connectivity across any cloud or runtime.
   consul:
     image: consul
     ports:
@@ -11,7 +11,8 @@ services:
     volumes:
       - consul:/consul/data
 
-  # Vault As a secrets manager        
+  # Vault :- Secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets
+  # and other sensitive data using a UI, CLI, or HTTP API.
   vault:
     image: vault
     ports:
