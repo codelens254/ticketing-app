@@ -1,0 +1,137 @@
+version: "3.5"
+
+services:
+  # Consul For Service Discovery
+  consul:
+    image: consul
+    ports:
+      - 8500:8500
+    networks:
+      - ticketing-app
+    volumes:
+      - consul:/consul/data
+
+  # Vault As a secrets manager        
+  vault:
+    image: vault
+    ports:
+      - 8200:8200
+    networks:
+      - ticketing-app
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_DEV_ROOT_TOKEN_ID=secret # this shd be secret
+    cap_add:
+      - IPC_LOCK
+  
+  # MongoDb as the NoSQL Persistence Option      
+  mongodb:
+    image: mongo:4
+    ports:
+      - 27020:27017
+    networks:
+      - ticketing-app
+    volumes:
+      - mongo:/data/db
+      
+  # RabbitMQ for Message Queueing   
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - ticketing-app
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq       
+      
+  # Redis for Caching      
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      - ticketing-app
+    volumes:
+      - redis:/data      
+
+  # Postgres as the SQL Persistence
+  postgres:
+    image: postgres
+    ports:
+     - 5439:5432
+    networks:
+      - ticketing-app
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=disbursements
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+  # MySql - We'll use this persistence for Keycloak ...
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql_data_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+    networks:
+      - ticketing-app
+
+
+  # Axon Framework :-  To help in building DDD, CQRS and Event Sourcing applications
+  axon:
+    image: axoniq/axonserver
+    ports:
+      - 8024:8024
+      - 8124:8124
+    networks:
+      - ticketing-app
+
+  # Keycloak :- Open Source Identity and Access Management For Modern Applications and Services
+  keycloak:
+    image: quay.io/keycloak/keycloak:12.0.1
+    expose:
+      - 8080
+    ports:
+      - 9990:8080
+    depends_on:
+      - mysql
+    networks:
+      - ticketing-app
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+      JDBC_PARAMS: "useSSL=false"
+
+networks:
+  ticketing-app:
+    name: ticketing-app
+    external: true
+      
+volumes:
+  postgres-volume:
+    driver: local
+  consul:
+    driver: local
+  mongo:
+    driver: local
+  rabbitmq:
+    driver: local
+  redis:
+    driver: local
+  mysql_data_volume:
+    driver: local
+      
+    
