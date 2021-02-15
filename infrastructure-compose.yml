@@ -1,7 +1,7 @@
 version: "3.5"
 
 services:
-  # Consul For Service Discovery
+  # Consul :- Automate network configurations, discover services, and enable secure connectivity across any cloud or runtime.
   consul:
     image: consul
     ports:
@@ -11,7 +11,8 @@ services:
     volumes:
       - consul:/consul/data
 
-  # Vault As a secrets manager        
+  # Vault :- Secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets
+  # and other sensitive data using a UI, CLI, or HTTP API.
   vault:
     image: vault
     ports:
@@ -34,7 +35,7 @@ services:
     volumes:
       - mongo:/data/db
       
-  # RabbitMQ for Message Queueing   
+  # RabbitMQ for Message Queueing. Our preffered message broker utilising AMQP protocol ...
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -72,10 +73,10 @@ services:
 
 
   # MySql - We'll use this persistence for Keycloak ...
-  mysql:
+  mysql-keycloak:
     image: mysql:5.7
     volumes:
-      - mysql_data_volume:/var/lib/mysql
+      - mysql_data_volume_2:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: keycloak
@@ -100,14 +101,14 @@ services:
     expose:
       - 8080
     ports:
-      - 9990:8080
+      - 9080:8080
     depends_on:
-      - mysql
+      - mysql-keycloak
     networks:
       - ticketing-app
     environment:
       DB_VENDOR: MYSQL
-      DB_ADDR: mysql
+      DB_ADDR: mysql-keycloak
       DB_DATABASE: keycloak
       DB_USER: keycloak
       DB_PASSWORD: password
@@ -131,7 +132,7 @@ volumes:
     driver: local
   redis:
     driver: local
-  mysql_data_volume:
+  mysql_data_volume_2:
     driver: local
       
     
