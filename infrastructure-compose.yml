@@ -4,6 +4,7 @@ services:
   # Consul :- Automate network configurations, discover services, and enable secure connectivity across any cloud or runtime.
   consul:
     image: consul
+    container_name: ticketing-app-consul
     ports:
       - 8500:8500
     networks:
@@ -15,6 +16,7 @@ services:
   # and other sensitive data using a UI, CLI, or HTTP API.
   vault:
     image: vault
+    container_name: ticketing-app-vault
     ports:
       - 8200:8200
     networks:
@@ -28,6 +30,7 @@ services:
   # MongoDb as the NoSQL Persistence Option      
   mongodb:
     image: mongo:4
+    container_name: ticketing-app-mongodb
     ports:
       - 27020:27017
     networks:
@@ -38,6 +41,7 @@ services:
   # RabbitMQ for Message Queueing. Our preffered message broker utilising AMQP protocol ...
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: ticketing-app-rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
@@ -49,6 +53,7 @@ services:
   # Redis for Caching      
   redis:
     image: redis
+    container_name: ticketing-app-redis
     ports:
       - 6379:6379
     networks:
@@ -59,6 +64,7 @@ services:
   # Postgres as the SQL Persistence
   postgres:
     image: postgres
+    container_name: ticketing-app-postgres
     ports:
      - 5439:5432
     networks:
@@ -75,6 +81,7 @@ services:
   # MySql - We'll use this persistence for Keycloak ...
   mysql-keycloak:
     image: mysql:5.7
+    container_name: ticketing-app-mysql-keycloak
     volumes:
       - mysql_data_volume_2:/var/lib/mysql
     environment:
@@ -89,6 +96,7 @@ services:
   # Axon Framework :-  To help in building DDD, CQRS and Event Sourcing applications
   axon:
     image: axoniq/axonserver
+    container_name: ticketing-app-axon
     ports:
       - 8024:8024
       - 8124:8124
@@ -98,6 +106,7 @@ services:
   # Keycloak :- Open Source Identity and Access Management For Modern Applications and Services
   keycloak:
     image: quay.io/keycloak/keycloak:12.0.1
+    container_name: ticketing-app-keycloak
     expose:
       - 8080
     ports:
