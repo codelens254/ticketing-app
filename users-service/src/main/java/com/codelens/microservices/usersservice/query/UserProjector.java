@@ -3,6 +3,9 @@ package com.codelens.microservices.usersservice.query;
 
 import com.codelens.microservices.usersservice.coreapi.*;
 import com.codelens.microservices.usersservice.entities.UserEntity;
+import com.codelens.microservices.usersservice.events.UserCreatedEvent;
+import com.codelens.microservices.usersservice.events.UserDeletedEvent;
+import com.codelens.microservices.usersservice.events.UserUpdatedEvent;
 import com.codelens.microservices.usersservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventsourcing.EventSourcingHandler;
