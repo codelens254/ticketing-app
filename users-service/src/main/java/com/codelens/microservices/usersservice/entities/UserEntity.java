@@ -17,11 +17,13 @@ public class UserEntity {
     private String name;
     private String address;
     private String phoneNumber;
+    private Boolean isDeleted;
 
-    public UserEntity(UUID userId, String name, String address, String phoneNumber) {
+    public UserEntity(UUID userId, String name, String address, String phoneNumber, Boolean isDeleted) {
         this.userId = userId;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.isDeleted = isDeleted;
     }
 }

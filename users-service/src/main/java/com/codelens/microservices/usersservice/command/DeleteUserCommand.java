@@ -9,4 +9,8 @@ import java.util.UUID;
 public class DeleteUserCommand {
     @TargetAggregateIdentifier
     private UUID userId;
+
+    public DeleteUserCommand(UUID userId) {
+        this.userId = userId;
+    }
 }

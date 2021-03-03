@@ -1,6 +1,8 @@
 package com.codelens.microservices.usersservice.controllers;
 
 import com.codelens.microservices.usersservice.command.CreateUserCommand;
+import com.codelens.microservices.usersservice.command.DeleteUserCommand;
+import com.codelens.microservices.usersservice.command.UpdateUserCommand;
 import com.codelens.microservices.usersservice.entities.UserEntity;
 import com.codelens.microservices.usersservice.query.FindAllUsersQuery;
 import com.codelens.microservices.usersservice.query.FindUserQuery;
@@ -41,5 +43,16 @@ public class UsersController {
     public CompletableFuture<List<UserEntity>> getAllUsers() {
         return queryGateway.query(new FindAllUsersQuery(),
                 ResponseTypes.multipleInstancesOf(UserEntity.class));
+    }
+
+    @PutMapping("/update")
+    public void updateUser(@RequestBody UpdateUserCommand command){
+        commandGateway.send(command);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable String userId) {
+        DeleteUserCommand command = new DeleteUserCommand(UUID.fromString(userId));
+        commandGateway.send(command);
     }
 }
