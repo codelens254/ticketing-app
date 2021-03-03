@@ -1,5 +1,8 @@
-package com.codelens.microservices.usersservice.command;
+package com.codelens.microservices.usersservice.aggregates;
 
+import com.codelens.microservices.usersservice.command.CreateUserCommand;
+import com.codelens.microservices.usersservice.command.DeleteUserCommand;
+import com.codelens.microservices.usersservice.command.UpdateUserCommand;
 import com.codelens.microservices.usersservice.coreapi.*;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
@@ -23,7 +26,7 @@ public class UserAggregate {
 
     @CommandHandler
     public UserAggregate(CreateUserCommand createUserCommand) {
-        userId = UUID.randomUUID();
+        userId = createUserCommand.getUserId();
         log.info("Creating user command ...");
 
         AggregateLifecycle.apply(new UserCreatedEvent(userId,

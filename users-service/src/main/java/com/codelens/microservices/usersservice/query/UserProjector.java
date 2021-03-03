@@ -9,6 +9,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -47,5 +48,10 @@ public class UserProjector {
     public UserEntity handle(FindUserQuery findUserQuery) {
         return userRepository.findById(findUserQuery.getUserId())
                 .orElse(null);
+    }
+
+    @QueryHandler
+    public List<UserEntity> handle(FindAllUsersQuery findAllUsersQuery) {
+        return userRepository.findAll();
     }
 }
