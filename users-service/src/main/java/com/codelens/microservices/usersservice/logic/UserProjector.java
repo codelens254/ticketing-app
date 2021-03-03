@@ -1,11 +1,12 @@
-package com.codelens.microservices.usersservice.query;
+package com.codelens.microservices.usersservice.logic;
 
 
-import com.codelens.microservices.usersservice.coreapi.*;
 import com.codelens.microservices.usersservice.entities.UserEntity;
 import com.codelens.microservices.usersservice.events.UserCreatedEvent;
 import com.codelens.microservices.usersservice.events.UserDeletedEvent;
 import com.codelens.microservices.usersservice.events.UserUpdatedEvent;
+import com.codelens.microservices.usersservice.query.FindAllUsersQuery;
+import com.codelens.microservices.usersservice.query.FindUserQuery;
 import com.codelens.microservices.usersservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -25,7 +26,7 @@ public class UserProjector {
         this.userRepository = userRepository;
     }
 
-    @EventSourcingHandler // will handle @userCreatedEvent for this aggregate's lifecycle ...
+    @EventSourcingHandler
     public void on(UserCreatedEvent userCreatedEvent) {
         UUID userId = userCreatedEvent.getUserId();
         log.info(String.format("Handling user created event ..%s", userId));

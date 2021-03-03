@@ -1,9 +1,9 @@
 package com.codelens.microservices.usersservice.controllers;
 
 import com.codelens.microservices.usersservice.command.CreateUserCommand;
-import com.codelens.microservices.usersservice.coreapi.FindAllUsersQuery;
-import com.codelens.microservices.usersservice.coreapi.FindUserQuery;
 import com.codelens.microservices.usersservice.entities.UserEntity;
+import com.codelens.microservices.usersservice.query.FindAllUsersQuery;
+import com.codelens.microservices.usersservice.query.FindUserQuery;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;

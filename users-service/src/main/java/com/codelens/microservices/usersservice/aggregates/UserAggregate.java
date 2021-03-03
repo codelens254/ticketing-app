@@ -3,10 +3,10 @@ package com.codelens.microservices.usersservice.aggregates;
 import com.codelens.microservices.usersservice.command.CreateUserCommand;
 import com.codelens.microservices.usersservice.command.DeleteUserCommand;
 import com.codelens.microservices.usersservice.command.UpdateUserCommand;
-import com.codelens.microservices.usersservice.coreapi.*;
 import com.codelens.microservices.usersservice.events.UserCreatedEvent;
 import com.codelens.microservices.usersservice.events.UserDeletedEvent;
 import com.codelens.microservices.usersservice.events.UserUpdatedEvent;
+import com.codelens.microservices.usersservice.exceptions.UserDoesNotExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -51,7 +51,8 @@ public class UserAggregate {
     @CommandHandler
     public void on(DeleteUserCommand deleteUserCommand) throws UserDoesNotExistsException {
         if (deleteUserCommand.getUserId() == null)
-            throw new UserDoesNotExistsException();
+            throw new UserDoesNotExistsException(String.format("User with Id:%s does not exist",
+                    deleteUserCommand.getUserId()));
         AggregateLifecycle.apply(new UserDeletedEvent(userId));
     }
 
