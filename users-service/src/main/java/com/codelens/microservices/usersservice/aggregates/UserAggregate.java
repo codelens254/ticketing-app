@@ -3,13 +3,11 @@ package com.codelens.microservices.usersservice.aggregates;
 import com.codelens.microservices.usersservice.command.CreateUserCommand;
 import com.codelens.microservices.usersservice.command.DeleteUserCommand;
 import com.codelens.microservices.usersservice.command.UpdateUserCommand;
-import com.codelens.microservices.usersservice.entities.UserEntity;
 import com.codelens.microservices.usersservice.events.UserCreatedEvent;
 import com.codelens.microservices.usersservice.events.UserDeletedEvent;
 import com.codelens.microservices.usersservice.events.UserUpdatedEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -79,10 +77,11 @@ public class UserAggregate {
         phoneNumber = userUpdatedEvent.getPhoneNumber();
     }
 
+
     @CommandHandler
     public void on(DeleteUserCommand deleteUserCommand) {
-        this.userId = deleteUserCommand.getUserId();
-        // this is where all the business logic should happen ...
+        // do your business logic ....
+        userId = deleteUserCommand.getUserId();
         AggregateLifecycle.apply(new UserDeletedEvent(userId, true));
     }
 
@@ -91,4 +90,5 @@ public class UserAggregate {
         userId = userDeletedEvent.getUserId();
         isDeleted = userDeletedEvent.getIsDeleted();
     }
+
 }

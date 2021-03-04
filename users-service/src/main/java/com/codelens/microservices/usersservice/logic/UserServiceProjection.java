@@ -10,7 +10,6 @@ import com.codelens.microservices.usersservice.query.FindUserQuery;
 import com.codelens.microservices.usersservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
-import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
 
@@ -53,17 +52,6 @@ public class UserServiceProjection {
                 });
     }
 
-    @EventHandler
-    public void on(UserDeletedEvent userDeletedEvent) {
-        log.info(String.format("Handling user deleted event...%s", userDeletedEvent.getUserId()));
-
-        userRepository.findById(userDeletedEvent.getUserId())
-                .ifPresent(userEntity -> {
-                    userEntity.setIsDeleted(true);
-                    userRepository.save(userEntity);
-                });
-
-    }
 
     @QueryHandler
     public UserEntity handle(FindUserQuery findUserQuery) {
@@ -74,5 +62,14 @@ public class UserServiceProjection {
     @QueryHandler
     public List<UserEntity> handle(FindAllUsersQuery findAllUsersQuery) {
         return userRepository.findAll();
+    }
+
+    @EventHandler
+    public void on(UserDeletedEvent userDeletedEvent) {
+        userRepository.findById(userDeletedEvent.getUserId())
+                .ifPresent(userEntity -> {
+                    userEntity.setIsDeleted(userDeletedEvent.getIsDeleted());
+                    userRepository.save(userEntity);
+                });
     }
 }

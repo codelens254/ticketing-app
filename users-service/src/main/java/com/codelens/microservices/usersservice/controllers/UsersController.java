@@ -46,7 +46,7 @@ public class UsersController {
     }
 
     @PutMapping("/update")
-    public void updateUser(@RequestBody UpdateUserCommand command){
+    public void updateUser(@RequestBody UpdateUserCommand command) {
         commandGateway.send(command);
     }
 
