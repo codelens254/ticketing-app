@@ -12,3 +12,9 @@ spring:
     url: jdbc:postgresql://localhost:5439/ticketing-users
     username: postgres
     password: admin
+
+  rabbitmq:
+    password: guest
+    username: guest
+    host: localhost
+    port: 5672
