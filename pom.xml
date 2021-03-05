@@ -19,6 +19,7 @@
     <modules>
         <module>ticketing-common-modules</module>
         <module>users-service</module>
+        <module>notifications-service</module>
     </modules>
 
 </project>
