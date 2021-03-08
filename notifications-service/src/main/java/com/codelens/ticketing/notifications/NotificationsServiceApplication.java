@@ -1,13 +1,13 @@
-package com.example.demo;
+package com.codelens.ticketing.notifications;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class NotificationsServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(NotificationsServiceApplication.class, args);
     }
 
 }

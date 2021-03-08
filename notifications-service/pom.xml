@@ -12,10 +12,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Ticketing App :: Notifications Service</name>
     <description>Demo project for Spring Boot</description>
+
     <properties>
         <axon.version>4.4.6</axon.version>
         <ticketing-common-modules.version>1.0-SNAPSHOT</ticketing-common-modules.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,6 +44,13 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>com.codelens.ticketing</groupId>
+            <artifactId>ticketing-common-modules</artifactId>
+            <version>${ticketing-common-modules.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
