@@ -1,6 +1,8 @@
 package com.codelens.microservices.usersservice.logic;
 
 
+import amqp.BrokerProducer;
+import amqp.BrokerProducerImpl;
 import com.codelens.microservices.usersservice.entities.UserEntity;
 import com.codelens.microservices.usersservice.events.UserCreatedEvent;
 import com.codelens.microservices.usersservice.events.UserDeletedEvent;
@@ -8,14 +10,20 @@ import com.codelens.microservices.usersservice.events.UserUpdatedEvent;
 import com.codelens.microservices.usersservice.query.FindAllUsersQuery;
 import com.codelens.microservices.usersservice.query.FindUserQuery;
 import com.codelens.microservices.usersservice.repository.UserRepository;
+import dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
-import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.queryhandling.QueryHandler;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
+
+import static Utils.Constants.TICKETING_USERS_QUEUE;
 
 @Component
 @Slf4j
@@ -23,9 +31,24 @@ public class UserServiceProjection {
 
     private final UserRepository userRepository;
 
-    public UserServiceProjection(UserRepository userRepository) {
+    private final BrokerProducer<UserDto> userDtoBrokerProducer;
+
+    private final RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    public UserServiceProjection(UserRepository userRepository,
+                                 @Lazy BrokerProducer<UserDto> userDtoBrokerProducer,
+                                 RabbitTemplate rabbitTemplate) {
         this.userRepository = userRepository;
+        this.userDtoBrokerProducer = userDtoBrokerProducer;
+        this.rabbitTemplate = rabbitTemplate;
     }
+
+    @Bean
+    public BrokerProducer<UserDto> getUserDtoBrokerProducer() {
+        return new BrokerProducerImpl<>(rabbitTemplate);
+    }
+
 
     @EventHandler
     public void on(UserCreatedEvent userCreatedEvent) {
@@ -38,6 +61,15 @@ public class UserServiceProjection {
                 userCreatedEvent.getPhoneNumber(),
                 false);
         userRepository.save(user);
+
+        // publish user created to the broker ...
+
+        UserDto userDto = new UserDto(userId,
+                userCreatedEvent.getName(),
+                userCreatedEvent.getAddress(),
+                userCreatedEvent.getPhoneNumber());
+
+        userDtoBrokerProducer.sendPayloadToBroker(userDto, TICKETING_USERS_QUEUE);
     }
 
     @EventHandler

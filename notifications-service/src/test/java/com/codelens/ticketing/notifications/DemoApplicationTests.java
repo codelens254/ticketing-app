@@ -1,10 +1,10 @@
-package com.codelens.microservices.usersservice;
+package com.codelens.ticketing.notifications;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UsersServiceApplicationTests {
+class DemoApplicationTests {
 
     @Test
     void contextLoads() {

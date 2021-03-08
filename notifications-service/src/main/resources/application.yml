@@ -1,5 +1,5 @@
 server:
-  port: 7000
+  port: 7001
 spring:
   jpa:
     hibernate:
@@ -10,10 +10,9 @@ spring:
     generate-ddl: true
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5439/ticketing-users
+    url: jdbc:postgresql://localhost:5439/ticketing-notifications
     username: postgres
     password: admin
-
   rabbitmq:
     password: guest
     username: guest
